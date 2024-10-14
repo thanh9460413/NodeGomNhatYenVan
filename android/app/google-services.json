@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "265332355511",
+    "firebase_url": "https://gomsuyenvan-default-rtdb.firebaseio.com",
+    "project_id": "gomsuyenvan",
+    "storage_bucket": "gomsuyenvan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265332355511:android:ef8506ab9a26de92afb832",
+        "android_client_info": {
+          "package_name": "com.gmnhtynvn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265332355511-tp6amjik33vorugj55mjemlc1gm0oq33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1MlOVgzaZBXzpepqjZYh1HTULKoxyoYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265332355511-tp6amjik33vorugj55mjemlc1gm0oq33.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

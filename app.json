@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Gốm Nhật Yến Vân",
+    "slug": "GomNhatYenVan",
+    "version": "1.0.0",
+    "jsEngine": "hermes",
+    "orientation": "portrait",
+    "icon": "./assets/YẾN-VÂN-logos.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/YẾN-VÂN-logos.png",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/YẾN-VÂN-logos.png"
+      },
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET"
+      ],
+      "package": "com.thanh946041.GomNhatYenVan"
+    },
+    "web": {
+      "favicon": "./assets/YẾN-VÂN-logos.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8623873d-35fb-4431-8bb8-2aef4a79ff1f"
+      }
+    }
+  }
+}
