@@ -9,7 +9,7 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { FIREBASE_APP } from '../../FirebaseConfig';
 import { SelectList } from 'react-native-dropdown-select-list'
-import { getDatabase, ref, onValue, push, get, set, query, orderByChild, equalTo, remove } from 'firebase/database';
+import { getDatabase, ref, onValue, push, get, set, query, orderByChild, equalTo, remove,update } from 'firebase/database';
 import localData from '../../files/Address.json';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useIsFocused } from '@react-navigation/native';
@@ -242,7 +242,7 @@ const PhieuTinhTien = () => {
         if (querySnapshot.exists()) {
           querySnapshot.forEach((childSnapshot) => {
             const existingItemKey = childSnapshot.key;
-            set(ref(database, `KhachHang/${existingItemKey}`), {
+            update(ref(database, `KhachHang/${existingItemKey}`), {
               SDTKhachHang: SDTKhachHang,
               TenKhachHang: khachHang,
               DiaChi: DiaChiKhachHang,
@@ -502,8 +502,8 @@ const PhieuTinhTien = () => {
       <ScrollView contentContainerStyle={styles.container} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
-        <View style={styles.infoCotainer}>
-          <Text style={styles.infoTitnle}>  THÔNG TIN KHÁCH HÀNG</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoTitle}>  THÔNG TIN KHÁCH HÀNG</Text>
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Số Điện Thoại</Text>

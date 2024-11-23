@@ -2,14 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, StatusBar, useColorScheme } from 'react-native';
 import { Table, Row } from 'react-native-table-component';
 import { AntDesign } from '@expo/vector-icons';
-import { Button, Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
+import { Button, Provider as PaperProvider, DefaultTheme, Checkbox } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import axios, { all } from 'axios';
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { FIREBASE_APP } from '../../FirebaseConfig';
 import { SelectList } from 'react-native-dropdown-select-list'
-import { getDatabase, ref, onValue, push, get, set, query, orderByChild, equalTo } from 'firebase/database';
+import { getDatabase, ref, onValue, push, get, set, query, orderByChild, equalTo, update } from 'firebase/database';
 import localData from '../../files/Address.json';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useIsFocused } from '@react-navigation/native';
@@ -37,6 +37,7 @@ const PhieuVanChuyen = () => {
     const isFocused = useIsFocused();
     const [hasSelectedOnce, setHasSelectedOnce] = useState(true);
     const [searchValue, setSearchValue] = useState('');
+    const [check, setCheck] = useState(false);
     const searchSdtInArray = (allItems, searchSdt) => {
         if (allItems && searchSdt) {
             for (const key in allItems) {
@@ -141,7 +142,7 @@ const PhieuVanChuyen = () => {
         
         @media print {
             html, body {
-                margin: 0mm;
+                margin: 50px;
                 padding: 0;
                 box-sizing: border-box;
             }
@@ -153,20 +154,23 @@ const PhieuVanChuyen = () => {
             }
         }
         
-        body {
-            font-family: Arial, sans-serif;
-            padding: 0;
-            box-sizing: border-box;
-            margin: 0;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: stretch;
-            height: 100vh;
-        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  width: ${check ? '148mm' : '400mm'}; /* Sử dụng đơn vị mm cho kích thước A5 và A4 */
+  height: ${check ? '100mm' : '180mm'};
         
         .header, .footer {
             display: flex;
@@ -179,7 +183,7 @@ const PhieuVanChuyen = () => {
         }
         
         .footer {
-            padding-bottom: 20px;
+            padding-top:10px
         }
         
         .bold {
@@ -187,15 +191,15 @@ const PhieuVanChuyen = () => {
         }
         
         .text-35 {
-            font-size: 35px;
+            font-size: ${check?'16px':'33px'};
             margin-bottom: 10px;
         }
         
         .text-45 {
-            font-size: 45px;
+            font-size: ${check?'25px':'45px'};
         }
         .text-40{
-        font-size: 40px;
+        font-size:${check?'20px':'40px'};
         }
         .columns {
             display: flex;
@@ -214,7 +218,7 @@ const PhieuVanChuyen = () => {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: ${check?'30px':'60px'};
         }
         
         .column-25 .text {
@@ -236,12 +240,12 @@ const PhieuVanChuyen = () => {
         
         .column-72 .text1 {
             font-weight: bold;
-            font-size: 60px;
+            font-size: ${check?'30px':'60px'};
         }
         
         .column-72 .text2 {
             font-weight: bold;
-            font-size: 55px;
+            font-size: ${check?'25px':'55px'};
         }
         
         .column-40 {
@@ -262,10 +266,18 @@ const PhieuVanChuyen = () => {
                         <div class="column-25">
                              <div class="text">Người gửi:</div>
                         </div>
-                        <div class="column-72">
-                            <div class="text2">Gốm Sứ Yến Vân</div>
-                            <div class="text2">Kinh doanh đa phương tiện</div>
-                        </div>
+${check ? `
+  <div class="column-72">
+    <div class="text1">Vân Diy</div>
+  </div>
+` : `
+  <div class="column-72">
+    <div class="text2">Gốm Sứ Yến Vân</div>
+    <div class="text2">Kinh doanh đa phương tiện</div>
+  </div>
+`}
+
+
                     </div>
                     <div class="text-35">
                         <span class="bold">Địa chỉ:</span>
@@ -273,7 +285,7 @@ const PhieuVanChuyen = () => {
                     </div>
                     <div class="text-40">
                         <span class="bold">SĐT/Zalo:</span>
-                        0918095223 & 0919696242
+                        ${check?'0919589411':'0918095223 & 0919696242'}
                     </div>
                     <div class="text-40">
                         <span class="bold">Người nhận:</span>
@@ -298,14 +310,14 @@ const PhieuVanChuyen = () => {
                             <span class="bold">Số lượng:</span>
                             ${SoLuong}
                         </div>
-                        <div class="column-50 bold" style="padding-left:20px; font-size: 45px;">HÀNG DỄ VỠ</div>
+                        <div class="column-50 bold" style="padding-left:20px; font-size: ${check?'25px':'45px'};">HÀNG DỄ VỠ</div>
                     </div>
                     <div class="columns">
                         <div class="column-50 text-40">
                             <span class="bold">Ship:</span>
                             ${Ship}
                         </div>
-                        <div class="column-50 bold text-40" style="padding-left:25px; font-size: 45px;">GIÁ TRỊ CAO</div>
+                        <div class="column-50 bold text-40" style="padding-left:25px; font-size: ${check?'25px':'45px'};">GIÁ TRỊ CAO</div>
                     </div>
                     <div class="columns">
                         <div class="column-40 text-40">
@@ -318,7 +330,7 @@ const PhieuVanChuyen = () => {
                 </div>
                 <div class="footer">
                     <div class="columns1">
-                        <div class="bold" style="font-size:40px">Chân thành cảm ơn quý khách đã ủng hộ Shop</div>
+                        <div class="bold" style="font-size:${check?'20px':'40px'}">Chân thành cảm ơn quý khách đã ủng hộ Shop</div>
                     </div>
                 </div>
             </div>
@@ -326,7 +338,7 @@ const PhieuVanChuyen = () => {
         </html>
         `;
         return htmlContent;
-        
+
     };
     const updateOrCreateCustomer = () => {
         if (!SDTKhachHang) {
@@ -342,7 +354,7 @@ const PhieuVanChuyen = () => {
                 if (querySnapshot.exists()) {
                     querySnapshot.forEach((childSnapshot) => {
                         const existingItemKey = childSnapshot.key;
-                        set(ref(database, `KhachHang/${existingItemKey}`), {
+                        update(ref(database, `KhachHang/${existingItemKey}`), {
                             SDTKhachHang: SDTKhachHang,
                             TenKhachHang: khachHang,
                             DiaChi: DiaChiKhachHang,
@@ -426,12 +438,7 @@ const PhieuVanChuyen = () => {
             html: generateHTML(),
             base64: false,
             Orientation: 'landscape', // Hướng ngang
-            width: pageWidth, // Sử dụng kích thước giấy A4 ngang
-            height: pageHeight, // Sử dụng kích thước giấy A4 dọc
-            marginLeft: margin,
-            marginRight: margin,
-            marginTop: margin,
-            marginBottom: margin
+
         });
 
         await shareAsync(file.uri);
@@ -724,6 +731,13 @@ const PhieuVanChuyen = () => {
                             />
                         </View>
                     </View>
+                    <View style={styles.checkbox}>
+                        <Checkbox.Android
+                            status={check ? 'checked' : 'unchecked'}
+                            onPress={() => setCheck(!check)}
+                        />
+                        <Text>Chốt Vân Diy</Text>
+                    </View>
 
 
 
@@ -928,7 +942,12 @@ const styles = StyleSheet.create({
     inputStyleDD: {
         fontSize: 12,
         color: '#317ef7'
-    }
+    },
+    checkbox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 5
+    },
 });
 
 export default PhieuVanChuyen;

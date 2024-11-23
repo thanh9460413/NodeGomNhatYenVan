@@ -11,7 +11,9 @@ import { NetPrinter } from '@nhaanh/react-native-thermal-receipt-printer-image-q
 import { captureRef } from 'react-native-view-shot';
 import { getStorage, ref as storageRef, listAll, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import logoImage from '../../assets/vD.png'
+import { useKeepAwake } from 'expo-keep-awake';
 const InDon = () => {
+  useKeepAwake();
   const [index, setIndex] = useState(0);
   const [khachHang, setKhachHang] = useState('');
   const [tenMonHang, setTenMonHang] = useState('');
@@ -81,7 +83,6 @@ const InDon = () => {
       setGia(dataMonHang[itemValue].SoLuong[selectedSoLuong].toString());
     }
   };
-
   const handleSoLuongChange = (value) => {
     setSoLuong(value);
     if (selectedMonHang && dataMonHang[selectedMonHang]?.SoLuong[value]) {
@@ -91,6 +92,7 @@ const InDon = () => {
   const clearInput = (setter) => {
     setter('');
   };
+  console.log(dataMonHang)
   // Function to format the date
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -547,7 +549,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    paddingTop: 46,
+    paddingTop: 36,
     flex: 1,
     marginBottom: 20,
     zIndex: 100

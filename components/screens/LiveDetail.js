@@ -5,8 +5,9 @@ import { FIREBASE_APP } from '../../FirebaseConfig';
 import { NetPrinter } from '@nhaanh/react-native-thermal-receipt-printer-image-qr';
 import { captureRef } from 'react-native-view-shot';
 import { getStorage, ref as storageRef, listAll, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
-
+import { useKeepAwake } from 'expo-keep-awake';
 const LiveDetail = ({ route, navigation }) => {
+  useKeepAwake();
   const { roomIds } = route.params;
   const { key } = route.params;
   const [comments, setComments] = useState([]);
@@ -206,22 +207,22 @@ const LiveDetail = ({ route, navigation }) => {
         });
 
         await NetPrinter.printBill(' ', { beep: false, cut: true });
-        const commentKey = comment.comment.match(/\d+/g); // Extract the number part
+        const commentKey = comment.comment.match(/\/(\d+)/); // Extract number after '/'
 
-        if (commentKey) {
-          const searchKey = commentKey.join(''); // Convert to a string
+        if (commentKey && commentKey[1]) {
+          const searchKey = commentKey[1]; // Lấy số sau dấu '/'
 
-          // Iterate through each Diy entry in the dataDiys object
+          // Lặp qua từng Diy trong dataDiys
           Object.keys(dataDiys).forEach(diyKey => {
             if (dataDiys[diyKey].key === searchKey) {
-              // If the key matches, update the isCheck field to true locally
+              // Nếu key trùng khớp, cập nhật isCheck field
               const updatedDataDiys = {
                 ...dataDiys,
                 [diyKey]: { ...dataDiys[diyKey], isCheck: true }
               };
               setDataDiys(updatedDataDiys);
 
-              // Update the isCheck field in Firebase
+              // Cập nhật isCheck trong Firebase
               const db = getDatabase();
               const updateRef = ref(db, `Diys/${diyKey}`);
               update(updateRef, { isCheck: true })
@@ -230,6 +231,7 @@ const LiveDetail = ({ route, navigation }) => {
             }
           });
         }
+
 
 
       } catch (error) {
